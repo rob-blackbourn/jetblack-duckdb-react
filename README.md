@@ -89,7 +89,7 @@ export default function App() {
 A descendent uses the `useDuckDB` hook to get the database.
 
 ```typescript
-export default function WeatherForecast() {
+export default function SomeComponent() {
   const { db, loading, error } = useDuckDB()
 
   useEffect(() => {
