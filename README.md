@@ -2,9 +2,11 @@
 
 Utilities for using duckdb with react.
 
+You can find an example app using vite [here](https://github.com/rob-blackbourn/demo-duckdb-react-vite).
+
 ## Installation
 
-Install from npmjs.
+Install from [npmjs](https://www.npmjs.com/package/@jetblack/duckdb-react).
 
 ```bash
 npm install @jetblack/duckdb-react
@@ -14,10 +16,71 @@ npm install @jetblack/duckdb-react
 
 The main component is the `DuckDB` context provider.
 
-In order to create the context a wasm "bundle" must be created. The
-bundle is specific to the development environment.
+### DuckDB
 
-### Vite
+Dependents of the `DuckDB` component will have access to the context.
+
+```typescript
+import DuckDB from '@jetblack/duckdb-react'
+
+import SomeComponent from './SomeComponent'
+
+import VITE_BUNDLES from './bundles'
+
+export default function App() {
+  return (
+    <DuckDB bundles={VITE_BUNDLES}>
+
+      <SomeComponent />
+
+    </DuckDB>
+  )
+}
+```
+
+The `DuckDB` component takes the following properties:
+
+* `bundles`: `DuckDBBundles` - see the section on bundles below,
+* `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
+
+### useDuckDB
+
+A descendent uses the `useDuckDB` hook to get the database.
+
+```typescript
+import { useDuckDB } from '@jetblack/duckdb-react'
+
+export default function SomeComponent() {
+  const { db, loading, error } = useDuckDB()
+
+  useEffect(() => {
+    if (loading || !db || error) {
+      return
+    }
+
+    // Do something with the duckdb
+
+  }, [loading, db, error])
+
+  ...
+}
+```
+
+The properties returned by `useDuckDB` are:
+
+* `db`: `AsyncDuckDB | undefined`
+* `loading`: `boolean`
+* `error`: `string | Error | undefined`
+
+The `loading` property is initially `true`, becoming `false` when either the `db` property is set, or the `error` property is set.
+
+### Bundles
+
+In order to create the context a wasm "bundle" must be created. The
+bundle is specific to the development environment. The following
+gives the bundles defined by the [DuckDB documentation](https://duckdb.org/docs/api/wasm/instantiation).
+
+#### vite
 
 For vite, create the following `bundle.ts`.
 
@@ -42,16 +105,16 @@ const VITE_BUNDLES: DuckDBBundles = {
 export default VITE_BUNDLES
 ```
 
-### create-react-app
+#### webpack
 
-For create-react-app, create the following `bundle.ts`.
+For webpack, create the following `bundle.ts`.
 
 ```typescript bundle.js
 import { DuckDBBundles } from '@duckdb/duckdb-wasm'
-import duckdbMvpWasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm';
-import duckdbEHWasm from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm';
+import duckdbMvpWasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm'
+import duckdbEHWasm from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm'
 
-const CRA_BUNDLES: DuckDBBundles = {
+const WEBPACK_BUNDLES: DuckDBBundles = {
   mvp: {
     mainModule: duckdbMvpWasm,
     mainWorker: new URL('@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js', import.meta.url).toString(),
@@ -62,45 +125,5 @@ const CRA_BUNDLES: DuckDBBundles = {
   }
 }
 
-export default CRA_BUNDLES
-```
-
-### DuckDB
-
-Dependents of this component will have access to the context.
-
-```typescript
-import DuckDB from '../lib/DuckDB'
-import VITE_BUNDLES from './bundles'
-import WeatherForecast from './components/WeatherForecast'
-import Shell from './components/Shell'
-
-export default function App() {
-  return (
-    <DuckDB bundles={VITE_BUNDLES}>
-
-      // Children will have access to the context
-
-    </DuckDB>
-  )
-}
-```
-
-A descendent uses the `useDuckDB` hook to get the database.
-
-```typescript
-export default function SomeComponent() {
-  const { db, loading, error } = useDuckDB()
-
-  useEffect(() => {
-    if (loading || !db || error) {
-      return
-    }
-
-    // Do something with the duckdb
-
-  }, [loading, db, error])
-
-  ...
-}
+export default WEBPACK_BUNDLES
 ```
