@@ -1,0 +1,62 @@
+{
+  "name": "@jetblack/duckdb-react",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "author": "Rob Blackbourn <rob.blackbourn@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/rob-blackbourn/jetblack-duckdb-react",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rob-blackbourn/jetblack-duckdb-react"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --p ./tsconfig.build.json && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "duckdb",
+    "react"
+  ],
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "^1.28.1-dev106.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@apache-arrow/ts": "^15.0.0",
+    "@duckdb/duckdb-wasm-shell": "^1.28.1-dev106.0",
+    "@types/node": "^20.11.17",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.0",
+    "vite-plugin-dts": "^3.7.2"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none",
+    "printWidth": 80,
+    "arrowParens": "avoid",
+    "bracketsSpacing": true,
+    "bracketSameLine": false
+  },
+  "files": [
+    "dist"
+  ]
+}
