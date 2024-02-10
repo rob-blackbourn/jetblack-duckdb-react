@@ -54,7 +54,7 @@ import duckdbEHWasm from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm';
 const CRA_BUNDLES: DuckDBBundles = {
   mvp: {
     mainModule: duckdbMvpWasm,
-    mainWorker: ew URL('@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js', import.meta.url).toString(),
+    mainWorker: new URL('@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js', import.meta.url).toString(),
   },
   eh: {
     mainModule: duckdbEHWasm,
