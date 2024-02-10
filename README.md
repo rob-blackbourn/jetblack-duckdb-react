@@ -25,11 +25,11 @@ import DuckDB from '@jetblack/duckdb-react'
 
 import SomeComponent from './SomeComponent'
 
-import VITE_BUNDLES from './bundles'
+import bundles from './bundles'
 
 export default function App() {
   return (
-    <DuckDB bundles={VITE_BUNDLES}>
+    <DuckDB bundles={bundles}>
 
       <SomeComponent />
 
