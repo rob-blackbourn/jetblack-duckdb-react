@@ -76,7 +76,7 @@ The `loading` property is initially `true`, becoming `false` when either the `db
 
 ### Bundles
 
-In order to create the context a wasm "bundle" must be created. The
+In order to create the context a wasm "bundle" must be provided. The
 bundle is specific to the development environment. The following
 gives the bundles defined by the [DuckDB documentation](https://duckdb.org/docs/api/wasm/instantiation).
 
