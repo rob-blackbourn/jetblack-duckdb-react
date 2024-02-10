@@ -14,7 +14,11 @@ export default defineConfig({
       formats: ['es']
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', '@apache-arrow/ts']
+      external: ['react', 'react/jsx-runtime', '@apache-arrow/ts'],
+      output: {
+        assetFileNames: 'assets/[name][extname]',
+        entryFileNames: '[name].js'
+      }
     }
   }
 })
