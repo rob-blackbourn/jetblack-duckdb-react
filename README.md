@@ -137,7 +137,7 @@ strategy to get it's bundles. This requires less configuration
 than where the bundles were provided by an intranet.
 
 ```typescript
-import DuckDBJsDelivr from '@jetblack/duckdb-react'
+import { DuckDBJsDelivr } from '@jetblack/duckdb-react'
 
 import SomeComponent from './SomeComponent'
 
