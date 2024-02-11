@@ -127,3 +127,31 @@ const WEBPACK_BUNDLES: DuckDBBundles = {
 
 export default WEBPACK_BUNDLES
 ```
+
+### DuckDBJsDelivr
+
+The `duckdb-wasm` package can auto-discover it's bundles from
+the jsdelivr CDN. The component `DuckDBJsDelivr` uses this
+strategy to get it's bundles. This requires less configuration
+(the bundles are not required). The startup time might be slower
+than where the bundles were provided by an intranet.
+
+```typescript
+import DuckDBJsDelivr from '@jetblack/duckdb-react'
+
+import SomeComponent from './SomeComponent'
+
+export default function App() {
+  return (
+    <DuckDBJsDelivr>
+
+      <SomeComponent />
+
+    </DuckDBJsDelivr>
+  )
+}
+```
+
+The `DuckDBJsDelivr` component takes the following properties:
+
+* `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.

@@ -1,13 +1,12 @@
-import DuckDB from '../lib/main'
-import VITE_BUNDLES from './bundles'
+import { DuckDBJsDelivr } from '../lib/main'
 import WeatherForecast from './components/WeatherForecast'
 import Shell from './components/Shell'
 
 export default function App() {
   return (
-    <DuckDB bundles={VITE_BUNDLES}>
+    <DuckDBJsDelivr>
       <WeatherForecast />
       <Shell />
-    </DuckDB>
+    </DuckDBJsDelivr>
   )
 }
