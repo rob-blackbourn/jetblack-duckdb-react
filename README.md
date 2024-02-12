@@ -2,7 +2,8 @@
 
 Utilities for using [duckdb](https://duckdb.org/) with [react](https://react.dev/).
 
-You can find an example app using vite [here](https://github.com/rob-blackbourn/demo-duckdb-react-vite).
+You can find an example app using [vite](https://vitejs.dev/) [here](https://github.com/rob-blackbourn/demo-duckdb-react-vite),
+and an example using [webpack](https://webpack.js.org/) [here](https://github.com/rob-blackbourn/demo-duckdb-react-webpack).
 
 ## Installation
 
