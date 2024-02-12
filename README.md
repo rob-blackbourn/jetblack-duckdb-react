@@ -1,6 +1,6 @@
 # @jetblack/duckdb-react
 
-Utilities for using duckdb with react.
+Utilities for using [duckdb](https://duckdb.org/) with [react](https://react.dev/).
 
 You can find an example app using vite [here](https://github.com/rob-blackbourn/demo-duckdb-react-vite).
 
