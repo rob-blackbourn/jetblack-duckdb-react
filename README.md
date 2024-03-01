@@ -37,12 +37,12 @@ export default function App() {
 
   return (
     <DuckDB bundles={optionalBundles}>
-      <SomeComponent />
+      <HelloWorld />
     </DuckDB>
   )
 }
 
-function SomeComponent() {
+function HelloWorld() {
   const { db, loading, error } = useDuckDB()
 
   useEffect(() => {
