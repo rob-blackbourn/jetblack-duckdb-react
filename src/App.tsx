@@ -4,8 +4,11 @@ import WeatherForecast from './components/WeatherForecast'
 import Shell from './components/Shell'
 
 export default function App() {
+  const useVite = true
+  const bundles = useVite ? VITE_BUNDLES : undefined
+
   return (
-    <DuckDB bundles={VITE_BUNDLES}>
+    <DuckDB bundles={bundles}>
       <WeatherForecast />
       <Shell />
     </DuckDB>
