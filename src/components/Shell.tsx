@@ -4,7 +4,7 @@ import * as duckdbWasmShell from '@duckdb/duckdb-wasm-shell'
 import 'xterm/css/xterm.css'
 import shellWasm from '@duckdb/duckdb-wasm-shell/dist/shell_bg.wasm?url'
 
-import { useDuckDB } from '../../lib/helpers'
+import { useDuckDB } from '../../lib/hook'
 
 export default function Shell() {
   const ref = useRef<HTMLDivElement | null>(null)
