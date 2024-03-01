@@ -63,6 +63,7 @@ function HelloWorld() {
 The `DuckDB` component takes the following properties:
 
 * `bundles`: `DuckDBBundles | undefined` - see the section on bundles below,
+* `config`: `DuckDBConfig | undefined` - Optional configuration to apply to the database.
 * `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
 
 The properties returned by `useDuckDB` are:
