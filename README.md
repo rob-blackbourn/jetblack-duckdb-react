@@ -43,6 +43,7 @@ export default function App() {
 }
 
 function HelloWorld() {
+  // Get the DuckDB context from the hook.
   const { db, loading, error } = useDuckDB()
 
   useEffect(() => {
