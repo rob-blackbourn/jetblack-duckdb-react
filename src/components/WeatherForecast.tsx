@@ -9,27 +9,36 @@ export default function WeatherForecast() {
   const { db, loading, error } = useDuckDB()
   const [isTableLoaded, setIsTableLoaded] = useState(false)
 
+  // Load the data into DuckDB.
   useEffect(() => {
     if (!db) {
       return
     }
     const asyncFunc = async () => {
       console.log(weatherData)
-      const text = JSON.stringify(weatherData)
-      console.log('Loading table')
-      await db.registerFileText('observations.json', text)
+
+      console.log('Save the data as a file in the DuckDB file system.')
+      await db.registerFileText(
+        'observations.json',
+        JSON.stringify(weatherData)
+      )
+
+      console.log(
+        'Load the table from the DuckDB file system into the database.'
+      )
       const con = await db.connect()
       await con.insertJSONFromPath('observations.json', {
         name: 'observations'
       })
-      console.log('Table loaded')
 
+      console.log('Table loaded')
       setIsTableLoaded(true)
     }
 
     asyncFunc().catch(console.error)
   }, [db])
 
+  // Query the database table.
   useEffect(() => {
     if (!(isTableLoaded && db)) {
       return

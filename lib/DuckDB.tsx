@@ -10,11 +10,20 @@ import {
 } from './instantiateDB'
 
 export type DuckDBProps = {
+  /** Optional DuckDB bundles. If undefined the JsDelivr CDN will be used */
   bundles?: DuckDBBundles
+  /** Optional logger. If undefined ConsoleLogger will be used. */
   logger?: Logger
+  /** Child elements will have access to the DuckDB context with useContext */
   children: ReactNode | ReactNode[]
 }
 
+/**
+ * Provides a context provider for DuckDB.
+ *
+ * @param props The provider properties
+ * @returns A context provider for DuckDB
+ */
 export default function DuckDB({ bundles, logger, children }: DuckDBProps) {
   const [db, setDb] = useState<AsyncDuckDB>()
   const [loading, setLoading] = useState(true)
