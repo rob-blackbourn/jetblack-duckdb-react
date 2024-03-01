@@ -2,6 +2,7 @@ import {
   AsyncDuckDB,
   ConsoleLogger,
   DuckDBBundles,
+  DuckDBConfig,
   InstantiationProgressHandler,
   Logger,
   getJsDelivrBundles,
@@ -16,7 +17,7 @@ import {
  * @param progress An optional installation progress callback.
  * @returns The DuckDB database
  */
-export async function instantiateWithBundles(
+async function instantiateWithBundles(
   bundles: DuckDBBundles,
   logger?: Logger,
   progress?: InstantiationProgressHandler
@@ -41,7 +42,7 @@ export async function instantiateWithBundles(
  * @param progress An optional installation progress callback.
  * @returns The DuckDB database.
  */
-export async function instantiateWithJsDelivr(
+async function instantiateWithJsDelivr(
   logger?: Logger,
   progress?: InstantiationProgressHandler
 ): Promise<AsyncDuckDB> {
@@ -65,6 +66,23 @@ export async function instantiateWithJsDelivr(
   await db.instantiate(bundle.mainModule, bundle.pthreadWorker, progress)
 
   URL.revokeObjectURL(workerUrl)
+
+  return db
+}
+
+export async function instantiateDuckDB(
+  bundles?: DuckDBBundles,
+  config?: DuckDBConfig,
+  logger?: Logger,
+  progress?: InstantiationProgressHandler
+) {
+  const db = bundles
+    ? await instantiateWithBundles(bundles, logger, progress)
+    : await instantiateWithJsDelivr(logger, progress)
+
+  if (config) {
+    await db.open(config)
+  }
 
   return db
 }

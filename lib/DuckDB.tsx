@@ -10,10 +10,7 @@ import {
 
 import DuckDBContext from './DuckDBContext'
 
-import {
-  instantiateWithBundles,
-  instantiateWithJsDelivr
-} from './instantiateDB'
+import { instantiateDuckDB } from './instantiateDB'
 
 export type DuckDBProps = {
   /** Optional DuckDB bundles. If undefined the JsDelivr CDN will be used */
@@ -27,7 +24,7 @@ export type DuckDBProps = {
 }
 
 /**
- * Provides a context provider for DuckDB.
+ * A context provider for DuckDB.
  *
  * @param props The provider properties
  * @returns A context provider for DuckDB
@@ -48,19 +45,7 @@ export default function DuckDB({
   }
 
   useEffect(() => {
-    const createDbAsync = async () => {
-      const db = bundles
-        ? await instantiateWithBundles(bundles, logger, handleProgress)
-        : await instantiateWithJsDelivr(logger, handleProgress)
-
-      if (config) {
-        await db.open(config)
-      }
-
-      return db
-    }
-
-    createDbAsync()
+    instantiateDuckDB(bundles, config, logger, handleProgress)
       .then(setDb)
       .catch(setError)
       .finally(() => setLoading(false))
