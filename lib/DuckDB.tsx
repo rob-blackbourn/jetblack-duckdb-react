@@ -4,6 +4,7 @@ import {
   AsyncDuckDB,
   DuckDBBundles,
   DuckDBConfig,
+  InstantiationProgress,
   Logger
 } from '@duckdb/duckdb-wasm'
 
@@ -40,12 +41,17 @@ export default function DuckDB({
   const [db, setDb] = useState<AsyncDuckDB>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error>()
+  const [progress, setProgress] = useState<InstantiationProgress>()
+
+  const handleProgress = (progress: InstantiationProgress) => {
+    setProgress(progress)
+  }
 
   useEffect(() => {
     const createDbAsync = async () => {
       const db = bundles
-        ? await instantiateWithBundles(bundles, logger)
-        : await instantiateWithJsDelivr(logger)
+        ? await instantiateWithBundles(bundles, logger, handleProgress)
+        : await instantiateWithJsDelivr(logger, handleProgress)
 
       if (config) {
         await db.open(config)
@@ -61,7 +67,7 @@ export default function DuckDB({
   }, [logger, bundles, config])
 
   return (
-    <DuckDBContext.Provider value={{ db, loading, error }}>
+    <DuckDBContext.Provider value={{ db, loading, error, progress }}>
       {children}
     </DuckDBContext.Provider>
   )

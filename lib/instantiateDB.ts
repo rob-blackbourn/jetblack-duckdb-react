@@ -2,6 +2,7 @@ import {
   AsyncDuckDB,
   ConsoleLogger,
   DuckDBBundles,
+  InstantiationProgressHandler,
   Logger,
   getJsDelivrBundles,
   selectBundle
@@ -12,11 +13,13 @@ import {
  *
  * @param bundles The DuckDB bundles
  * @param logger An optional logger
+ * @param progress An optional installation progress callback.
  * @returns The DuckDB database
  */
 export async function instantiateWithBundles(
   bundles: DuckDBBundles,
-  logger?: Logger
+  logger?: Logger,
+  progress?: InstantiationProgressHandler
 ): Promise<AsyncDuckDB> {
   // Select a bundle based on browser checks.
   const bundle = await selectBundle(bundles)
@@ -26,7 +29,7 @@ export async function instantiateWithBundles(
     logger || new ConsoleLogger(),
     new Worker(bundle.mainWorker!)
   )
-  await db.instantiate(bundle.mainModule, bundle.pthreadWorker)
+  await db.instantiate(bundle.mainModule, bundle.pthreadWorker, progress)
 
   return db
 }
@@ -35,10 +38,12 @@ export async function instantiateWithBundles(
  * Instantiate a DuckDB database using a bundle provided by the JsDelivr CDN.
  *
  * @param logger An optional logger.
+ * @param progress An optional installation progress callback.
  * @returns The DuckDB database.
  */
 export async function instantiateWithJsDelivr(
-  logger?: Logger
+  logger?: Logger,
+  progress?: InstantiationProgressHandler
 ): Promise<AsyncDuckDB> {
   // Get the bundles from the JsDelivr CDN.
   const bundles = getJsDelivrBundles()
@@ -57,7 +62,7 @@ export async function instantiateWithJsDelivr(
     logger || new ConsoleLogger(),
     new Worker(workerUrl)
   )
-  await db.instantiate(bundle.mainModule, bundle.pthreadWorker)
+  await db.instantiate(bundle.mainModule, bundle.pthreadWorker, progress)
 
   URL.revokeObjectURL(workerUrl)
 
