@@ -7,6 +7,13 @@ import {
   selectBundle
 } from '@duckdb/duckdb-wasm'
 
+/**
+ * Instantiate a DuckDB database using a provided bundle.
+ *
+ * @param bundles The DuckDB bundles
+ * @param logger An optional logger
+ * @returns The DuckDB database
+ */
 export async function instantiateWithBundles(
   bundles: DuckDBBundles,
   logger?: Logger
@@ -24,6 +31,12 @@ export async function instantiateWithBundles(
   return db
 }
 
+/**
+ * Instantiate a DuckDB database using a bundle provided by the JsDelivr CDN.
+ *
+ * @param logger An optional logger.
+ * @returns The DuckDB database.
+ */
 export async function instantiateWithJsDelivr(
   logger?: Logger
 ): Promise<AsyncDuckDB> {

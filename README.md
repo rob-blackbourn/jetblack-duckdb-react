@@ -19,7 +19,7 @@ The main component is the `DuckDB` context provider.
 
 ### DuckDB
 
-Dependents of the `DuckDB` component will have access to the context.
+Children of the `DuckDB` component will have access to the database context.
 
 ```typescript
 import DuckDB from '@jetblack/duckdb-react'
@@ -41,7 +41,7 @@ export default function App() {
 
 The `DuckDB` component takes the following properties:
 
-* `bundles`: `DuckDBBundles` - see the section on bundles below,
+* `bundles`: `DuckDBBundles | undefined` - see the section on bundles below,
 * `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
 
 ### useDuckDB
@@ -59,7 +59,7 @@ export default function SomeComponent() {
       return
     }
 
-    // Do something with the duckdb
+    // Do something with duckdb.
 
   }, [loading, db, error])
 
@@ -77,9 +77,15 @@ The `loading` property is initially `true`, becoming `false` when either the `db
 
 ### Bundles
 
-In order to create the context a wasm "bundle" must be provided. The
-bundle is specific to the development environment. The following
+In order to create the context a wasm "bundle" may be provided. If a bundle is
+not specified it will be downloaded from the JsDelivr CDN.
+
+If specified the bundle is specific to the development environment. The following
 gives the bundles defined by the [DuckDB documentation](https://duckdb.org/docs/api/wasm/instantiation).
+
+#### No bundle
+
+If no bundle is provided the bundle will be discovered from the JsDelivr CDN.
 
 #### vite
 
@@ -128,31 +134,3 @@ const WEBPACK_BUNDLES: DuckDBBundles = {
 
 export default WEBPACK_BUNDLES
 ```
-
-### DuckDBJsDelivr
-
-The `duckdb-wasm` package can auto-discover it's bundles from
-the jsdelivr CDN. The component `DuckDBJsDelivr` uses this
-strategy to get it's bundles. This requires less configuration
-(the bundles are not required). The startup time might be slower
-than where the bundles were provided by an intranet.
-
-```typescript
-import { DuckDBJsDelivr } from '@jetblack/duckdb-react'
-
-import SomeComponent from './SomeComponent'
-
-export default function App() {
-  return (
-    <DuckDBJsDelivr>
-
-      <SomeComponent />
-
-    </DuckDBJsDelivr>
-  )
-}
-```
-
-The `DuckDBJsDelivr` component takes the following properties:
-
-* `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
