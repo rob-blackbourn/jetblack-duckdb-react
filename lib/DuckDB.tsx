@@ -1,6 +1,11 @@
 import { ReactNode, useEffect, useState } from 'react'
 
-import { AsyncDuckDB, DuckDBBundles, Logger } from '@duckdb/duckdb-wasm'
+import {
+  AsyncDuckDB,
+  DuckDBBundles,
+  DuckDBConfig,
+  Logger
+} from '@duckdb/duckdb-wasm'
 
 import DuckDBContext from './DuckDBContext'
 
@@ -14,6 +19,8 @@ export type DuckDBProps = {
   bundles?: DuckDBBundles
   /** Optional logger. If undefined ConsoleLogger will be used. */
   logger?: Logger
+  /** Optional configuration. */
+  config?: DuckDBConfig
   /** Child elements will have access to the DuckDB context with useContext */
   children: ReactNode | ReactNode[]
 }
@@ -24,21 +31,34 @@ export type DuckDBProps = {
  * @param props The provider properties
  * @returns A context provider for DuckDB
  */
-export default function DuckDB({ bundles, logger, children }: DuckDBProps) {
+export default function DuckDB({
+  bundles,
+  logger,
+  config,
+  children
+}: DuckDBProps) {
   const [db, setDb] = useState<AsyncDuckDB>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error>()
 
   useEffect(() => {
-    const createDbAsync = bundles
-      ? async () => instantiateWithBundles(bundles, logger)
-      : async () => instantiateWithJsDelivr(logger)
+    const createDbAsync = async () => {
+      const db = bundles
+        ? await instantiateWithBundles(bundles, logger)
+        : await instantiateWithJsDelivr(logger)
+
+      if (config) {
+        await db.open(config)
+      }
+
+      return db
+    }
 
     createDbAsync()
       .then(setDb)
       .catch(setError)
       .finally(() => setLoading(false))
-  }, [logger, bundles])
+  }, [logger, bundles, config])
 
   return (
     <DuckDBContext.Provider value={{ db, loading, error }}>
