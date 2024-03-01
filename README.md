@@ -21,43 +21,28 @@ npm install @jetblack/duckdb-react
 
 ## Usage
 
-The main component is the `DuckDB` context provider.
-
-### DuckDB
+Use the `DuckDB` context provider to connect to the database and provide a
+context.
 
 Children of the `DuckDB` component will have access to the database context.
 
 ```typescript
-import DuckDB from '@jetblack/duckdb-react'
-
-import SomeComponent from './SomeComponent'
+import DuckDB, { useDuckDB } from '@jetblack/duckdb-react'
 
 import bundles from './bundles'
 
 export default function App() {
+  const useBundles = true
+  const optionalBundles = useBundles ? bundles : undefined
+
   return (
-    <DuckDB bundles={bundles}>
-
+    <DuckDB bundles={optionalBundles}>
       <SomeComponent />
-
     </DuckDB>
   )
 }
-```
 
-The `DuckDB` component takes the following properties:
-
-* `bundles`: `DuckDBBundles | undefined` - see the section on bundles below,
-* `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
-
-### useDuckDB
-
-A descendent uses the `useDuckDB` hook to get the database.
-
-```typescript
-import { useDuckDB } from '@jetblack/duckdb-react'
-
-export default function SomeComponent() {
+function SomeComponent() {
   const { db, loading, error } = useDuckDB()
 
   useEffect(() => {
@@ -69,9 +54,15 @@ export default function SomeComponent() {
 
   }, [loading, db, error])
 
-  ...
+  return <div>Hello, World!</div>
 }
+
 ```
+
+The `DuckDB` component takes the following properties:
+
+* `bundles`: `DuckDBBundles | undefined` - see the section on bundles below,
+* `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
 
 The properties returned by `useDuckDB` are:
 
@@ -79,7 +70,8 @@ The properties returned by `useDuckDB` are:
 * `loading`: `boolean`
 * `error`: `string | Error | undefined`
 
-The `loading` property is initially `true`, becoming `false` when either the `db` property is set, or the `error` property is set.
+The `loading` property is initially `true`, becoming `false` when either
+the `db` property is set, or the `error` property is set.
 
 ### Bundles
 
