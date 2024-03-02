@@ -21,22 +21,16 @@ npm install @jetblack/duckdb-react
 
 ## Usage
 
-Use the `DuckDB` context provider to connect to the database and provide a
-context.
+Use the `DuckDB` context provider to connect to the database.
 
 Children of the `DuckDB` component will have access to the database context.
 
 ```typescript
 import DuckDB, { useDuckDB } from '@jetblack/duckdb-react'
 
-import bundles from './bundles'
-
 export default function App() {
-  const useBundles = true
-  const optionalBundles = useBundles ? bundles : undefined
-
   return (
-    <DuckDB bundles={optionalBundles}>
+    <DuckDB>
       <HelloWorld />
     </DuckDB>
   )
@@ -65,16 +59,13 @@ The `DuckDB` component takes the following properties:
 * `bundles`: `DuckDBBundles | undefined` - see the section on bundles below,
 * `config`: `DuckDBConfig | undefined` - Optional configuration to apply to the database.
 * `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
-* `progress`: `InstantiationProgress | undefined` - This is updated during the database instantiation.
 
 The properties returned by `useDuckDB` are:
 
-* `db`: `AsyncDuckDB | undefined`
-* `loading`: `boolean`
-* `error`: `string | Error | undefined`
-
-The `loading` property is initially `true`, becoming `false` when either
-the `db` property is set, or the `error` property is set.
+* `db`: `AsyncDuckDB | undefined` - Set to the database when successfully instantiated.
+* `progress`: `InstantiationProgress | undefined` - This is updated during the database instantiation.
+* `loading`: `boolean` - This is initially `false`, becoming `true` when either the `db` or `error` property is set.
+* `error`: `string | Error | undefined` - Set to the error when instantiation has failed.
 
 ### Bundles
 
@@ -90,9 +81,11 @@ If no bundle is provided the bundle will be discovered from the JsDelivr CDN.
 
 #### vite
 
-For vite, create the following `bundle.ts`.
+For vite, create the following.
 
-```typescript bundle.ts
+```typescript
+import DuckDB from '@jetblack/duckdb-react'
+
 import { DuckDBBundles } from '@duckdb/duckdb-wasm'
 import duckdbMvpWasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url'
 import duckdbMvpWorker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url'
@@ -110,7 +103,13 @@ const VITE_BUNDLES: DuckDBBundles = {
   }
 }
 
-export default VITE_BUNDLES
+export default function App() {
+  return (
+    <DuckDB bundles={VITE_BUNDLES}>
+      ...
+    </DuckDB>
+  )
+}
 ```
 
 #### webpack
@@ -118,6 +117,8 @@ export default VITE_BUNDLES
 For webpack, create the following `bundle.ts`.
 
 ```typescript bundle.js
+import DuckDB from '@jetblack/duckdb-react'
+
 import { DuckDBBundles } from '@duckdb/duckdb-wasm'
 import duckdbMvpWasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm'
 import duckdbEHWasm from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm'
@@ -133,5 +134,11 @@ const WEBPACK_BUNDLES: DuckDBBundles = {
   }
 }
 
-export default WEBPACK_BUNDLES
+export default function App() {
+  return (
+    <DuckDB bundles={WEBPACK_BUNDLES}>
+      ...
+    </DuckDB>
+  )
+}
 ```
