@@ -57,14 +57,14 @@ function HelloWorld() {
 
 The `DuckDB` component takes the following properties:
 
-* `bundles`: `DuckDBBundles | undefined` - see the section on bundles below,
-* `config`: `DuckDBConfig | undefined` - Optional configuration to apply to the database.
-* `logger`: `Logger | undefined` - defaults to the built in `ConsoleLogger`.
+* `bundles`: [`DuckDBBundles`](https://shell.duckdb.org/docs/interfaces/index.DuckDBBundles.html) `|` `undefined` - see the section on bundles below,
+* `config`: [`DuckDBConfig`](https://shell.duckdb.org/docs/interfaces/index.DuckDBConfig.html) `|` `undefined` - Optional configuration to apply to the database.
+* `logger`: [`Logger`](https://shell.duckdb.org/docs/interfaces/index.Logger.html) `|` `undefined` - defaults to the built in [`ConsoleLogger`](https://shell.duckdb.org/docs/classes/index.ConsoleLogger.html).
 
 The properties returned by `useDuckDB` are:
 
-* `db`: `AsyncDuckDB | undefined` - Set to the database when successfully instantiated.
-* `progress`: `InstantiationProgress | undefined` - This is updated during the database instantiation.
+* `db`: [`AsyncDuckDB`](https://shell.duckdb.org/docs/classes/index.AsyncDuckDB.html) `|` `undefined` - Set to the database when successfully instantiated.
+* `progress`: [`InstantiationProgress`](https://shell.duckdb.org/docs/interfaces/index.InstantiationProgress.html) `|` `undefined` - This is updated during the database instantiation.
 * `loading`: `boolean` - This is initially `false`, becoming `true` when either the `db` or `error` property is set.
 * `error`: `string | Error | undefined` - Set to the error when instantiation has failed.
 

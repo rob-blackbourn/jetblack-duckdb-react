@@ -1,21 +1,14 @@
-import { Table } from '@apache-arrow/ts'
+import { Table, DataType, TypeMap } from '@apache-arrow/ts'
+import { AsyncDuckDB, AsyncDuckDBConnection } from '@duckdb/duckdb-wasm'
 
-const reviveRow = (
-  row: Record<string, unknown>,
-  reviver: (key: string, value: unknown) => unknown
-) =>
-  Object.entries(row).reduce(
-    (obj, [key, value]) => ({
-      ...obj,
-      [key]: reviver(key, value)
-    }),
-    {}
-  )
-
-export function* arrowRowGenerator(
-  table: Table,
-  reviver?: (key: string, value: unknown) => unknown
-) {
+export function* arrowRowGenerator<
+  TValue extends object = Record<string, unknown>,
+  TRawValue extends object = Record<string, unknown>,
+  TTable extends Record<string, DataType> = TypeMap
+>(
+  table: Table<TTable>,
+  reviver: (value: TRawValue) => TValue
+): Generator<TValue, void, unknown> {
   for (let i = 0; i < table.numRows; ++i) {
     // Get the row as JSON.
     const row = table.get(i)?.toJSON() as Record<string, unknown> | null
@@ -26,6 +19,38 @@ export function* arrowRowGenerator(
       continue
     }
 
-    yield reviver ? reviveRow(row, reviver) : row
+    yield reviver(row as TRawValue)
   }
+}
+
+export async function sqlJson<
+  TValue extends object = Record<string, unknown>,
+  TRawValue extends object = Record<string, unknown>,
+  TTable extends Record<string, DataType> = TypeMap
+>(
+  connection: AsyncDuckDBConnection,
+  sql: string,
+  reviver: (value: TRawValue) => TValue
+): Promise<TValue[]> {
+  const table = await connection.query<TTable>(sql)
+  const rows = Array.from(await arrowRowGenerator(table, reviver))
+  return rows
+}
+
+export async function sqlJsonDB<
+  TValue extends object = Record<string, unknown>,
+  TRawValue extends object = Record<string, unknown>,
+  TTable extends Record<string, DataType> = TypeMap
+>(
+  db: AsyncDuckDB,
+  sql: string,
+  reviver: (value: TRawValue) => TValue
+): Promise<TValue[]> {
+  const connection = await db.connect()
+  const rows = await sqlJson<TValue, TRawValue, TTable>(
+    connection,
+    sql,
+    reviver
+  )
+  return rows
 }

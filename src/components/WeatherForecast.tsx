@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useDuckDB } from '../../lib/main'
 
-import { arrowRowGenerator } from '../utils'
+import { sqlJsonDB } from '../utils'
 import weatherData from '../assets/data.json'
 
 interface Observation {
@@ -39,13 +39,15 @@ export default function WeatherForecast() {
     }
 
     const asyncFunc = async () => {
-      const con = await db.connect()
-      const table = await con.query('SELECT * FROM observations LIMIT 10;')
-      const rows = Array.from(
-        arrowRowGenerator(table, (key, value) =>
-          key === 'time' && typeof value === 'number' ? new Date(value) : value
-        )
-      ) as Observation[]
+      const rows = await sqlJsonDB(
+        db,
+        'SELECT * FROM observations LIMIT 10;',
+        (value: { time: string; temperature: number }) =>
+          ({
+            time: new Date(value.time),
+            temperature: value.temperature
+          } as Observation)
+      )
       return rows
     }
 
