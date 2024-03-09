@@ -4,8 +4,9 @@ import { useDuckDB } from '../../lib/main'
 
 import { sqlJsonDB } from '../utils'
 import weatherData from '../assets/data.json'
+import SimpleTable, { Column, Row } from './SimpleTable'
 
-interface Observation {
+interface Observation extends Row {
   time: Date
   temperature: number
 }
@@ -54,22 +55,19 @@ export default function WeatherForecast() {
     asyncFunc().then(setObservations).catch(console.error)
   }, [isTableLoaded, db])
 
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Time</th>
-          <th style={{ textAlign: 'right' }}>Temperature</th>
-        </tr>
-      </thead>
-      <tbody>
-        {observations.map(({ time, temperature }) => (
-          <tr key={time.valueOf()}>
-            <td>{time.toISOString()}</td>
-            <td style={{ textAlign: 'right' }}>{temperature.toFixed(2)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
+  const columns: Column[] = [
+    {
+      key: 'time',
+      title: 'Time',
+      formatValue: (value: unknown) => (value as Date).toISOString()
+    },
+    {
+      key: 'temperature',
+      title: 'Temperature',
+      formatValue: (value: unknown) => (value as number).toFixed(2),
+      textAlign: 'right'
+    }
+  ]
+
+  return <SimpleTable<Observation> columns={columns} rows={observations} />
 }
